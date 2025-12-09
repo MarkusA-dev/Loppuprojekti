@@ -1,18 +1,18 @@
 class room {
 public:
-	int roomId;
+	int type=0;
 	int price;
+	bool reserved = false;
 
-	room(int id, int price) : roomId(id), price(price) {}
-
-private:
-
+	room(int price, int t) : price(price), type(t) {}
 };
 
-class singleRoom final : room {
-	singleRoom(int id) : room(id, 100) {}
+class singleRoom final : public room {
+public:
+	singleRoom() : room(100, 1) {}
 };
 
-class twinRoom final : room {
-	twinRoom (int id) : room(id, 150) {}
+class twinRoom final : public room {
+public:
+	twinRoom () : room(150, 2) {}
 };

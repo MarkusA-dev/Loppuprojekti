@@ -128,6 +128,9 @@
     <ClCompile Include="reservationList.cpp" />
     <ClCompile Include="room.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="randgen.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
