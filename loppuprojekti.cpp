@@ -79,6 +79,13 @@ void resSearch(reservationList* resList) {
     while (selection < 1 && selection >2) {
         selection = getInt();
     }
+    switch(selection){
+    case 1:
+        resList->getReservation(getName());
+        break;
+    case 2:
+        break;
+    }
 }
 
 // Print all rooms with descriptive colors
@@ -124,6 +131,7 @@ string getName() {
         std::cin.clear();
         std::getline(std::cin, name);
     }
+    return name;
 }
 
 bool validateName(string name) {

@@ -44,16 +44,22 @@ public:
 	//void removeReservation(int id) {}
 	
 	
-	reservation getReservation(int index){
-		return reslist.at(index);
-	}
-
-	reservation getReservation(std::string name){
+	int getReservation(int resId){
 		for (reservation r : reslist) {
-			if (r.name == name) {
-				return r;
+			if (r.resId == resId) {
+				return r.roomId;
 			}
 		}
+		return -1;
+	}
+
+	int getReservation(std::string name){
+		for (reservation r : reslist) {
+			if (r.name == name) {
+				return r.roomId;
+			}
+		}
+		return -1;
 	}
 
 	bool roomIsFree(int index){
@@ -85,7 +91,6 @@ public:
 	int getRoomCount() {
 		return roomCount;
 	}
-
 
 private:
 	int roomCount;
