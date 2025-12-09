@@ -21,6 +21,6 @@ public:
 		if (discount == 0)
 			totalPrice = roomP->price * nightCount;
 		else
-			totalPrice = (roomP->price * nightCount) * (1.0 - discount / 100.0);
+			totalPrice = (roomP->price * nightCount) * (1.0 - float(discount) / 100.0);
 	}
 };

@@ -2,10 +2,9 @@
 
 #include <conio.h>
 #include <iostream>
-#include <string>
 #include "reservationList.cpp"
 
-using std::string;
+
 
 void menu(reservationList*);
 int getInt();
@@ -17,6 +16,8 @@ void setColor(int);
 void resetColor();
 
 void quit(reservationList*);
+bool validateName(string);
+string getName();
 
 int main()
 {
@@ -39,12 +40,12 @@ void menu(reservationList* resList) {
     do {
         system("cls");
         std::cout << "Hotel booking and management" << std::endl;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             std::cout << i + 1 << ". " << menuItems[i] << std::endl;
         }
 
         int c = getInt();
-        if (c >= 1 && c <= 4) {
+        if (c >= 1 && c <= 5) {
             switch (c) {
             case 1:
                 book(resList);
@@ -67,7 +68,10 @@ void menu(reservationList* resList) {
 
 void book(reservationList* resList) {
     system("cls");
-
+    string name = "test";
+    int roomNum = 0;
+    int nights = 3;
+    resList->addReservation(name, roomNum, nights);
 }
 
 void resSearch(reservationList* resList) {
@@ -75,12 +79,15 @@ void resSearch(reservationList* resList) {
     std::cout << "Reservation search, select which way to search" << std::endl;
     std::cout << "1. search by name" << std::endl;
     std::cout << "2. search by room" << std::endl;
-    int selection =0;
-    while (selection < 1 && selection >2) {
+    int selection = 0;
+    do {
         selection = getInt();
-    }
+    } while (selection < 2 && selection > 1);
+
     switch(selection){
     case 1:
+        system("cls");
+        std::cout << "Give name to search for: ";
         resList->getReservation(getName());
         break;
     case 2:
@@ -110,11 +117,13 @@ void printRooms(reservationList* resList) {
             std::cout << std::endl;
         resetColor();
     }
+    std::cout << "\npress any key to return";
+    getInt();
 }
 
 // Save the room and reservation vectors to files
 void quit(reservationList* resList) {
-    
+    exit(0);
 }
 
 // utility functions

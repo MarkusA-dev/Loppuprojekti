@@ -34,8 +34,9 @@ public:
 		}
 	}
 
-	void addReservation(string n, room* rId, int nights, int roomSize){
+	void addReservation(string n, int rId, int nights){
 		int id = randGen(10000, 99999);
+		reslist.push_back(reservation(id, n, &rooms.at(rId),nights,rId));
 
 	}
 
@@ -60,6 +61,12 @@ public:
 			}
 		}
 		return -1;
+	}
+
+	void printReservations() {
+		for (reservation r : reslist) {
+			std::cout << r.roomId << "\t" << r.resId << "\t" << r.name << "\t" << r.nightCount << "\t" << r.totalPrice << std::endl;
+		}
 	}
 
 	bool roomIsFree(int index){
