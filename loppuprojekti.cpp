@@ -162,6 +162,7 @@ void printRooms(reservationList* resList) {
 
 // Save the room and reservation vectors to files
 void quit(reservationList* resList) {
+    resList->saveToFile();
     exit(0);
 }
 

@@ -1,6 +1,7 @@
 #include <fstream>
 #include <vector>
 #include <iostream>
+#include <sstream>
 #include "reservation.cpp"
 using std::vector;
 
@@ -75,24 +76,64 @@ public:
 
 	// save rooms and reservations to separate files
 	bool saveToFile(){
-		string roomFilename = "roominfo.txt";
+		const string roomFilename = "roominfo.txt";
+		const string reservFilename = "reservinfo.txt";
 		std::ofstream f(roomFilename);
-		if (!f.is_open()) {
+		std::ofstream f2(reservFilename);
+		if (!f.is_open() || !f2.is_open()) {
 			std::cout << "failed create file " << roomFilename << std::endl;
 			return false;
 		}
 		else {
-			for (int i = 0; i < roomCount; i++) {
-				if (rooms.at(i).reserved == true) {
-					//logic for saving reservation data
-				}
-				
+			f << getRoomCount()<<"\n";
+			for (room r : rooms) {
+				f<<r.type<<" "<<r.reserved<<"\n";
+			}
+			for (reservation res : reslist) {
+				f2  << res.resId << " "
+					<< res.roomId << " "
+					<< res.name << " "
+					<< res.nightCount << " "
+					<< res.discount << res.totalPrice << "\n";
 			}
 		}
 		return true;
 	}
 	bool loadFromFile(){
-		return false;
+		const string roomFilename = "roominfo.txt";
+		const string reservFilename = "reservinfo.txt";
+		std::ifstream f(roomFilename);
+		std::ifstream f2(reservFilename);
+		if (!f.is_open() || !f2.is_open()) {
+			std::cout << "failed create file " << roomFilename << std::endl;
+			return false;
+		}
+		else {
+			int type = 0;
+			bool reserved = false;
+			room* temp = nullptr;
+			string line="";
+			f >> roomCount;
+			reslist.reserve(roomCount);
+			rooms.reserve(roomCount);
+			while (f>>type>>reserved) {
+				if (type == 1)
+					singleRoom temp;
+				else
+					twinRoom temp;
+				
+				if (temp != nullptr) {
+					if (reserved) {
+						temp->setReserved();
+						rooms.push_back(*temp);
+					}
+				}
+			}
+			while (std::getline(f2,line)) {
+
+			}
+		}
+		return true;
 	}
 
 	int getRoomCount() {
