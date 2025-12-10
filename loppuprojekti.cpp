@@ -3,21 +3,22 @@
 #include <conio.h>
 #include <iostream>
 #include "reservationList.cpp"
+#include "utilities.h"
+#include <thread>
+#include <chrono>
 
+#define RED 101
+#define GREEN 42
 
+using std::chrono::milliseconds;
+using std::this_thread::sleep_for;
 
 void menu(reservationList*);
-int getInt();
 void book(reservationList*);
-void resSearch(reservationList*);
-
+void reservationSearch(reservationList*);
 void printRooms(reservationList*);
-void setColor(int);
-void resetColor();
-
 void quit(reservationList*);
-bool validateName(string);
-string getName();
+
 
 int main()
 {
@@ -39,86 +40,124 @@ void menu(reservationList* resList) {
 
     do {
         system("cls");
+
         std::cout << "Hotel booking and management" << std::endl;
         for (int i = 0; i < 5; i++) {
             std::cout << i + 1 << ". " << menuItems[i] << std::endl;
         }
 
-        int c = getInt();
-        if (c >= 1 && c <= 5) {
-            switch (c) {
-            case 1:
-                book(resList);
-                break;
-            case 2:
-                resSearch(resList);
-                break;
-            case 3:
-                printRooms(resList);
-                break;
-            case 4:
-                break;
-            case 5:
-                quit(resList);
-                break;
-            }
+        int c = getNumber(1, 5);
+        switch (c) {
+        case 1:
+            book(resList);
+            break;
+        case 2:
+            reservationSearch(resList);
+            break;
+        case 3:
+            printRooms(resList);
+            break;
+        case 4:
+            system("cls");
+            std::cout << "reservations" << std::endl;
+            resList->printReservations();
+            std::cin.get();
+            std::cin.ignore();
+            break;
+        case 5:
+            quit(resList);
+            break;
         }
+
     } while (true);
 }
 
+// create a new reservation
 void book(reservationList* resList) {
     system("cls");
-    string name = "test";
-    int roomNum = 0;
-    int nights = 3;
+    std::cout << "Reserver name: ";
+    string name = getName();
+
+    std::cout << "\nRoom size (1 or 2) persons: ";
+    int roomSize = getNumber(1, 2);
+
+    std::cout << "Select room number: ";
+    int roomNum = getNumber(0, resList->getRoomCount());
+
+    std::cout << "\nHow many nights is the reservation for (max 356): ";
+    int nights = getNumber(1, 365);
     resList->addReservation(name, roomNum, nights);
 }
 
-void resSearch(reservationList* resList) {
+void reservationSearch(reservationList* resList) {
+    int reservIndex=-1;
     system("cls");
     std::cout << "Reservation search, select which way to search" << std::endl;
     std::cout << "1. search by name" << std::endl;
     std::cout << "2. search by room" << std::endl;
     int selection = 0;
-    do {
-        selection = getInt();
-    } while (selection < 2 && selection > 1);
+    selection = getNumber(1, 2);
 
     switch(selection){
     case 1:
         system("cls");
         std::cout << "Give name to search for: ";
-        resList->getReservation(getName());
+        reservIndex = resList->getReservation(getName());
         break;
     case 2:
+        system("cls");
+        std::cout << "Give reservation id to search for: ";
+        reservIndex = resList->getReservation(getNumber(10000, 99999));
         break;
     }
+    if (reservIndex < 0) {
+        std::cout << "Failed to find a reservation with the given information. please try again" << std::endl;
+        sleep_for(milliseconds(1500));
+        return;
+    }
+    resList->reslist.at(reservIndex).print();
+    std::cin.get();
+    std::cin.ignore();
 }
 
 // Print all rooms with descriptive colors
 void printRooms(reservationList* resList) {
     system("cls");
     int count = resList->getRoomCount();
+
+    
+    std::cout << "Free:\t\t";
+    setColor(GREEN);
+    std::cout << "  " << std::endl;
+
+    resetColor();
+    std::cout << "Reserved:\t";
+    setColor(RED);
+    std::cout << "  \n" << std::endl;
+    resetColor();
+
     for (int i = 0; i < count; i++) {
         // if the room is free set the outputs background color green, if the room is not free set it to red instead
-        if (resList->roomIsFree(i))
-            setColor(101);
-        else
-            setColor(42);
-        
+        if (resList->isReserved(i)) {
+            setColor(RED);
+        }
+        else {
+            setColor(GREEN);
+        }
         // the following if statements pad the text to avoid uneven rows
-        if (i+1 < 10)
+        if (i < 10)
             std::cout << " ";
-        if (i+1 < 100)
+        if (i < 100)
             std::cout << " ";
 
-        std::cout << " " << i+1 << " ";
+        std::cout << " " << i << " ";
         if ((i+1) % 20 == 0)
             std::cout << std::endl;
         resetColor();
     }
-    std::cout << "\npress any key to return";
-    getInt();
+    std::cout << "\npress enter to return";
+    std::cin.get();
+    std::cin.ignore();
 }
 
 // Save the room and reservation vectors to files
@@ -126,38 +165,3 @@ void quit(reservationList* resList) {
     exit(0);
 }
 
-// utility functions
-
-void setColor(int color) { std::cout << "\033[" << color << "m";}
-
-void resetColor() { std::cout << "\033[0m"; }
-
-string getName() {
-    string name = "";
-    std::getline(std::cin, name);
-    while (!validateName(name)) {
-        std::cout << "Please enter a valid name" << std::endl;
-        std::cin.clear();
-        std::getline(std::cin, name);
-    }
-    return name;
-}
-
-bool validateName(string name) {
-    if (name.length() == 0)
-        return false;
-    for (int i = 0; i < name.length(); i++)
-        if (name[i] >= '0' && name[i] <= '9')
-            return false;
-
-    return true;
-}
-
-int getInt() {
-    int c = 0;
-    c = _getch();
-    if (std::isdigit(c)) {
-        c -= '0';
-    }
-    return c;
-}

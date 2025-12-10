@@ -4,6 +4,10 @@ public:
 	int price;
 	bool reserved = false;
 
+	void setReserved() {
+		reserved = true;
+	}
+
 	room(int price, int t) : price(price), type(t) {}
 };
 

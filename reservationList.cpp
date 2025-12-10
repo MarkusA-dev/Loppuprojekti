@@ -36,8 +36,8 @@ public:
 
 	void addReservation(string n, int rId, int nights){
 		int id = randGen(10000, 99999);
-		reslist.push_back(reservation(id, n, &rooms.at(rId),nights,rId));
-
+		reslist.push_back(reservation(id, n, &rooms.at(rId), nights, rId));
+		rooms.at(rId).setReserved();
 	}
 
 	// Due to time constraints and the lack of this function being a strict requirement I have chosen to not implement it
@@ -65,11 +65,11 @@ public:
 
 	void printReservations() {
 		for (reservation r : reslist) {
-			std::cout << r.roomId << "\t" << r.resId << "\t" << r.name << "\t" << r.nightCount << "\t" << r.totalPrice << std::endl;
+			r.print();
 		}
 	}
 
-	bool roomIsFree(int index){
+	bool isReserved(int index){
 		return rooms.at(index).reserved;
 	}
 

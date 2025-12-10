@@ -32,5 +32,8 @@
     <ClInclude Include="randgen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="utilities.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 #include <string>
 #include "room.cpp"
 #include "randgen.h"
+#include <iostream>
 
 using std::string;
 
@@ -22,5 +23,9 @@ public:
 			totalPrice = roomP->price * nightCount;
 		else
 			totalPrice = (roomP->price * nightCount) * (1.0 - float(discount) / 100.0);
+	}
+
+	void print() {
+		std::cout << this->roomId << "\t" << this->resId << "\t" << this->name << "\t" << this->nightCount << "\t" << this->totalPrice << std::endl;
 	}
 };
