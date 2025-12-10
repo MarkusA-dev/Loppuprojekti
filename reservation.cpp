@@ -16,6 +16,8 @@ public:
 	int discountTable[3] = {0, 10, 20};		// possible discounts
 	int totalPrice=0;						// total price of the reservation
 
+	reservation(){}
+
 	reservation(int id, string n, room* rp, int nights, int rId) : resId(id), name(n), roomP(rp), nightCount(nights), roomId(rId) {
 		int index = randGen(0, 2);
 		discount = discountTable[index];

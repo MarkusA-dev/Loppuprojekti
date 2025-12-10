@@ -91,10 +91,11 @@ public:
 			}
 			for (reservation res : reslist) {
 				f2  << res.resId << " "
-					<< res.roomId << " "
 					<< res.name << " "
+					<< res.roomId << " "
 					<< res.nightCount << " "
-					<< res.discount << res.totalPrice << "\n";
+					<< res.discount<< " " 
+					<< res.totalPrice << "\n";
 			}
 		}
 		return true;
@@ -112,25 +113,30 @@ public:
 			int type = 0;
 			bool reserved = false;
 			room* temp = nullptr;
-			string line="";
+			reservation tempres;
+
+
 			f >> roomCount;
 			reslist.reserve(roomCount);
 			rooms.reserve(roomCount);
 			while (f>>type>>reserved) {
 				if (type == 1)
-					singleRoom temp;
+					temp = new singleRoom;
 				else
-					twinRoom temp;
+					temp = new twinRoom;
 				
 				if (temp != nullptr) {
 					if (reserved) {
 						temp->setReserved();
-						rooms.push_back(*temp);
 					}
+					rooms.push_back(*temp);
 				}
 			}
-			while (std::getline(f2,line)) {
-
+			while (f2>>tempres.resId>>tempres.name
+					 >>tempres.roomId>>tempres.nightCount
+					 >>tempres.discount>>tempres.totalPrice) {
+				tempres.roomP = &rooms.at(tempres.roomId);
+				reslist.push_back(tempres);
 			}
 		}
 		return true;

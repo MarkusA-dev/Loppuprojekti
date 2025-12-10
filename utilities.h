@@ -17,6 +17,7 @@ void resetColor() { std::cout << "\033[0m"; }
 int getNumber(int min, int max) {
     int num = 0;
     while (!(std::cin >> num) || num > max || num < min) {
+        std::cout << "\nplease enter valid digit: ";
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
@@ -29,7 +30,7 @@ string getName() {
     string name = "";
     std::getline(std::cin, name);
     while (!validateName(name)) {
-        std::cout << "Please enter a valid name" << std::endl;
+        std::cout << "\nPlease enter a valid name: ";
         std::cin.clear();
         std::getline(std::cin, name);
     }
